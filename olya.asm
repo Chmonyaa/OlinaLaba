@@ -15,54 +15,8 @@ include io.asm
     msg5 db "Array[5]:", 0Ah, 0Dh, '$'
     outputmsg db "Minimal element of Array is:", 0Ah, 0Dh, '$'
 .code
-.startup
 
-    lea bx, array           ;Запись адреса массива в bx
-    
-    mov ah, 9               ;-
-    lea dx, msg             ;- Вывод сообщения msg
-    int 21h                 ;-
-    
-    mov ah, 9               ;-
-    lea dx, msg1            ;- Вывод сообщения msg1
-    int 21h                 ;-
-    InInt x                 ;Ввод числа в x
-    mov si, x               ;Запись значения x в регистр si
-    mov [bx], si            ;Запись значения si по эффективному адресу bx
-    add bx, 1               ;Увеличение bx на 1 (Переход к следующему элементу массива)
-    
-    mov ah, 9               ;-
-    lea dx, msg2            ;- Вывод сообщения msg2
-    int 21h                 ;-
-    InInt x                 ;Ввод числа в x
-    mov si, x               ;-
-    mov [bx], si            ;- То же самое, что и выше, но для элемента bx+1
-    add bx, 1               ;-
-    
-    mov ah, 9               ;-
-    lea dx, msg3            ;- Вывод сообщения msg3
-    int 21h                 ;-
-    InInt x                 ;Ввод числа в x
-    mov si, x               ;-
-    mov [bx], si            ;- То же самое, что и выше для bx+2
-    add bx, 1               ;-
-    
-    mov ah, 9               ;-
-    lea dx, msg4            ;- Вывод сообщения msg4
-    int 21h                 ;-
-    InInt x                 ;Ввод числа в x
-    mov si, x               ;-
-    mov [bx], si            ;- То же самое для bx+3
-    add bx, 1               ;-
-    
-    mov ah, 9               ;-
-    lea dx, msg5            ;- Вывод сообщения msg5
-    int 21h                 ;-
-    InInt x                 ;Ввод числа в x
-    mov si, x               ;-
-    mov [bx], si            ;- То же самое для bx+4
-    add bx, 1               ;-
-
+minimalArr MACRO            ;объявление макроса
     mov si, offset array    ;смещение
     mov cx, 5               ;количество итераций (величина массива)
     mov bx, 7Fh             ;Большое число для поиска минимума
@@ -82,6 +36,55 @@ N2:
     mov ah, 9               ;-
     lea dx, outputmsg       ;- Вывод сообщения outputmsg
     int 21h                 ;-
+endm                        ;конец макроса
+.startup
+
+    lea bx, array           ;Запись адреса массива в bx
+    
+    mov ah, 9               ;-
+    lea dx, msg             ;- Вывод сообщения msg
+    int 21h                 ;-
+    
+    mov ah, 9               ;-
+    lea dx, msg1            ;- Вывод сообщения msg1
+    int 21h                 ;-
+    InInt x                 ;Ввод числа в x
+    mov si, x               ;Запись значения x в регистр si
+    mov [bx], si            ;Запись значения si по эффективному адресу bx
+    inc bx                  ;Увеличение bx на 1 (Переход к следующему элементу массива)
+    
+    mov ah, 9               ;-
+    lea dx, msg2            ;- Вывод сообщения msg2
+    int 21h                 ;-
+    InInt x                 ;Ввод числа в x
+    mov si, x               ;-
+    mov [bx], si            ;- То же самое, что и выше, но для элемента bx+1
+    inc bx                  ;-
+    
+    mov ah, 9               ;-
+    lea dx, msg3            ;- Вывод сообщения msg3
+    int 21h                 ;-
+    InInt x                 ;Ввод числа в x
+    mov si, x               ;-
+    mov [bx], si            ;- То же самое, что и выше для bx+2
+    inc bx                  ;-
+    
+    mov ah, 9               ;-
+    lea dx, msg4            ;- Вывод сообщения msg4
+    int 21h                 ;-
+    InInt x                 ;Ввод числа в x
+    mov si, x               ;-
+    mov [bx], si            ;- То же самое для bx+3
+    inc bx                  ;-
+    
+    mov ah, 9               ;-
+    lea dx, msg5            ;- Вывод сообщения msg5
+    int 21h                 ;-
+    InInt x                 ;Ввод числа в x
+    mov si, x               ;-
+    mov [bx], si            ;- То же самое для bx+4
+
+    minimalArr              ;вызов макроса
     OutInt x                ;вывод значения x на экран
 .exit 0
 end
